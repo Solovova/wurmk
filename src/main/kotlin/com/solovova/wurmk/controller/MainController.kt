@@ -1,5 +1,6 @@
 package com.solovova.wurmk.controller
 
+import com.solovova.wurmk.MainGUI
 import com.solovova.wurmk.controller.data.DataTableLog
 import com.solovova.wurmk.engine.EngineMain
 import com.solovova.wurmk.engine.config.EngineConfig
@@ -7,9 +8,12 @@ import com.solovova.wurmk.keyhook.KeyHookListener
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
+import javafx.scene.Scene
 import javafx.scene.control.ChoiceBox
 import javafx.scene.control.TableColumn
 import javafx.scene.control.TableView
+import javafx.scene.layout.StackPane
+import javafx.stage.Stage
 import org.jnativehook.GlobalScreen
 import org.jnativehook.NativeHookException
 
@@ -19,6 +23,7 @@ class MainController {
     private val cbCharData: ObservableList<String> = FXCollections.observableArrayList()
     private val cbTaskData: ObservableList<String> = FXCollections.observableArrayList()
     private var engineMain: EngineMain? = null
+    var mainGUI: MainGUI? = null
 
     @FXML
     lateinit var cbChar: ChoiceBox<String>
@@ -74,5 +79,9 @@ class MainController {
 
         config.cnfTasks.forEach { cbTaskData.add(it) }
         cbTask.selectionModel.select(config.cnfActiveTask)
+    }
+
+    fun showSt() {
+        mainGUI?.showSt()
     }
 }

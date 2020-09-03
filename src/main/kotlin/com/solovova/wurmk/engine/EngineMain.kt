@@ -2,12 +2,21 @@ package com.solovova.wurmk.engine
 
 import com.solovova.wurmk.controller.MainController
 import com.solovova.wurmk.controller.data.DataTableLog
-import com.solovova.wurmk.engine.script.ScriptFunctions
-import com.solovova.wurmk.engine.thread.ThreadLog
 import com.solovova.wurmk.engine.config.EngineConfig
-import com.solovova.wurmk.engine.point.PointMaster
+import com.solovova.wurmk.engine.thread.ThreadLog
 import com.solovova.wurmk.keyhook.KeyHookListener
+import javafx.application.Platform
+import javafx.embed.swing.SwingFXUtils
+import javafx.scene.Scene
+import javafx.scene.image.Image
+import javafx.scene.image.ImageView
+import javafx.scene.layout.StackPane
+import javafx.stage.Modality
+import javafx.stage.Stage
+import java.awt.Rectangle
+import java.awt.Robot
 import java.io.File
+
 
 //MainController <-----> EngineMain ----> EngineConfig
 //                                    --> ScriptEngine (thread)
@@ -54,6 +63,35 @@ class EngineMain(private val mainController: MainController) {
     //Hooks
     fun btnStartMonitor(){
         println("Hook down")
-        //PointMaster().openDraw()
+        Platform.runLater {
+            val robot = Robot()
+            val bufferedImage = robot.createScreenCapture(Rectangle(0,0,1920,1080))
+
+            val secondaryLayout = StackPane()
+            val imageView = ImageView()
+            imageView.image = SwingFXUtils.toFXImage(bufferedImage, null );
+            secondaryLayout.children.add(imageView)
+
+            val secondScene = Scene(secondaryLayout, 1920.0, 1080.0)
+
+            // New window (Stage)
+
+            // New window (Stage)
+            val newWindow = Stage()
+            newWindow.title = "Second Stage"
+            newWindow.scene = secondScene
+            newWindow.isFullScreen = true
+            newWindow.isIconified = false
+            newWindow.isResizable = false
+            newWindow.initModality(Modality.APPLICATION_MODAL)
+
+            // Set position of second window, related to primary window.
+
+            // Set position of second window, related to primary window.
+            newWindow.x = 0.0
+            newWindow.y = 0.0
+
+            newWindow.show()
+        }
     }
 }

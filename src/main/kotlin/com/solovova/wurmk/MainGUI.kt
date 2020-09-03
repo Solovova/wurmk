@@ -6,6 +6,7 @@ import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.scene.layout.Pane
+import javafx.scene.layout.StackPane
 import javafx.stage.Stage
 import org.opencv.core.Core
 
@@ -27,9 +28,14 @@ class MainGUI : Application() {
         val root: Pane = fxmlLoader.load(javaClass.getResource(layout).openStream())
 
         mainController = fxmlLoader.getController() as MainController
+        mainController?.mainGUI = this
 
         primaryStage?.scene = Scene(root)
         primaryStage?.show()
+    }
+
+    fun showSt() {
+
     }
 
     override fun stop() {
