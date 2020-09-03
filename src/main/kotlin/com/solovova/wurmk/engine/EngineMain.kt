@@ -5,6 +5,8 @@ import com.solovova.wurmk.controller.data.DataTableLog
 import com.solovova.wurmk.engine.script.ScriptFunctions
 import com.solovova.wurmk.engine.thread.ThreadLog
 import com.solovova.wurmk.engine.config.EngineConfig
+import com.solovova.wurmk.engine.point.PointMaster
+import com.solovova.wurmk.keyhook.KeyHookListener
 import java.io.File
 
 //MainController <-----> EngineMain ----> EngineConfig
@@ -14,12 +16,12 @@ import java.io.File
 class EngineMain(private val mainController: MainController) {
     private var threadLog: ThreadLog? = null
     private val engineConfig: EngineConfig = EngineConfig()
-
-    val scriptFunctions: ScriptFunctions = ScriptFunctions()
+    private val keyHookListener: KeyHookListener = KeyHookListener(this)
 
     init {
         engineConfig.load()
         mainController.update(engineConfig)
+        keyHookListener.hookRegister()
     }
 
     fun updateLog(logStr: String) {
@@ -28,6 +30,7 @@ class EngineMain(private val mainController: MainController) {
 
     fun stop() {
         threadLog?.stopIt = true
+        keyHookListener.hookUnRegister()
     }
 
     fun eventMCCharChange(ind: Int) {
@@ -46,5 +49,11 @@ class EngineMain(private val mainController: MainController) {
             mainController.clearLog()
             mainController.addLog(DataTableLog("Not exists!!!"))
         }
+    }
+
+    //Hooks
+    fun btnStartMonitor(){
+        println("Hook down")
+        //PointMaster().openDraw()
     }
 }

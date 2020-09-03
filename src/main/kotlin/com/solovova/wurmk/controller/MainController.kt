@@ -3,14 +3,15 @@ package com.solovova.wurmk.controller
 import com.solovova.wurmk.controller.data.DataTableLog
 import com.solovova.wurmk.engine.EngineMain
 import com.solovova.wurmk.engine.config.EngineConfig
-import javafx.beans.value.ChangeListener
-import javafx.beans.value.ObservableValue
+import com.solovova.wurmk.keyhook.KeyHookListener
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.scene.control.ChoiceBox
 import javafx.scene.control.TableColumn
 import javafx.scene.control.TableView
+import org.jnativehook.GlobalScreen
+import org.jnativehook.NativeHookException
 
 
 class MainController {
@@ -45,11 +46,10 @@ class MainController {
 
 
 
-        cbChar.selectionModel.selectedIndexProperty().addListener {
-            _, _, _ -> this.cbCharChange() }
+        cbChar.selectionModel.selectedIndexProperty().addListener { _, _, _ -> this.cbCharChange() }
 
         engineMain = EngineMain(this)
-        cbCharChange()
+        cbCharChange()//ToDo переделать чтобы самому вытягивать данные для заполнения
     }
 
     private fun cbCharChange() {
@@ -74,13 +74,5 @@ class MainController {
 
         config.cnfTasks.forEach { cbTaskData.add(it) }
         cbTask.selectionModel.select(config.cnfActiveTask)
-    }
-
-    fun scriptStart(){
-
-    }
-
-    fun scriptStop(){
-
     }
 }

@@ -33,6 +33,9 @@ dependencies {
     implementation("org.openjfx:javafx-controls:14:$platform")
 
     implementation("org.ini4j:ini4j:0.5.4")
+    implementation("com.1stleg:jnativehook:2.1.0")
+
+    implementation("org.openpnp:opencv:4.3.0-2")
 }
 
 application {

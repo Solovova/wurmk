@@ -1,9 +1,9 @@
 package com.solovova.wurmk.engine.config
 
 import com.solovova.wurmk.engine.config.data.DataChar
+import com.solovova.wurmk.engine.config.data.DataTask
 import org.ini4j.Wini
 import java.io.File
-
 
 class EngineConfig {
     var cnfChars: List<String> = listOf()
@@ -12,28 +12,40 @@ class EngineConfig {
 
     var cnfTasks: List<String> = listOf()
     var cnfActiveTask: Int = 0
+    private val cnfTaskData: MutableMap<String, DataTask> = mutableMapOf()
 
-    private fun loadCharsData(ini: Wini) {
-        cnfChars.forEach {
-            val dataChar = DataChar()
-            dataChar.nameLog = ini.get(it, "nameLog")
-            cnfCharsData[it] = dataChar
-        }
+    private fun iniGetDefString(ini: Wini, sectionName: String, optionName: String, defResult: String): String {
+        return ini.get(sectionName, optionName) ?: defResult
     }
 
-    fun getActiveDataChar():DataChar {
+    private fun iniGetDefInt(ini: Wini, sectionName: String, optionName: String, defResult: Int): Int {
+        val result: String? = ini.get(sectionName, optionName)
+        if (result != null) {
+            return result.toInt()
+        }
+        return defResult
+    }
+
+    fun getActiveDataChar(): DataChar {
         return cnfCharsData[cnfChars[cnfActiveChar]] ?: DataChar()
     }
 
     fun load() {
         val ini = Wini(File("config.ini"))
-        val characters: String = ini.get("Main", "characters")
+        val characters: String = iniGetDefString(ini, "Main", "characters", "Empty")
         cnfChars = characters.trim().split(",").map { it.trim() }
 
-        loadCharsData(ini)
+        cnfChars.forEach {
+            cnfCharsData[it] = DataChar(nameLog = iniGetDefString(ini, it, "nameLog", ""))
+        }
 
-        val tasks: String = ini.get("Main", "operations")
+        val tasks: String = iniGetDefString(ini, "Main", "operations", "Empty")
         cnfTasks = tasks.trim().split(",").map { it.trim() }
+
+        cnfTasks.forEach {
+            cnfTaskData[it] = DataTask(strTask = iniGetDefString(ini, it, "ToDo", ""),
+                    strPoints = iniGetDefString(ini, it, "Point", ""))
+        }
     }
 
     fun save() {
